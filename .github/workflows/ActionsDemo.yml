@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test-app:
+  build-and-test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -23,6 +23,12 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
+
+      - name: Test shell
+        run: echo "Hello from the shell!"
+
+      - name: List all files in the repository
+        run: ls -R
 
       - name: Restore dependencies
         run: dotnet restore
