@@ -48,9 +48,12 @@ jobs:
           if-no-files-found: error
 
       - name: Login to Azure
-        uses: azure/login@v1
+        uses: azure/login@v3
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy App Service Tempalte
+      - name: Deploy App Service Template
         run: az deployment group create --resource-group ActionsDemo --template-file ./main.bicep --parameters "appServiceName=jfactionsdemoprod"
+
+      - name: Deploy App Service Artifact
+        run: az webapp deployment source config-zip --resource-group ActionsDemo --name jfactionsdemoprod --src artifacts/ActionsDemo.zip
