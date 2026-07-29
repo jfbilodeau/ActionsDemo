@@ -54,7 +54,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          filter: ./infra/*
+          filter: infra/*
 
       - name: Login to Azure
         uses: azure/login@v3
@@ -64,5 +64,19 @@ jobs:
       - name: Deploy App Service Template
         run: az deployment group create --resource-group ActionsDemo --template-file ./infra/main.bicep --parameters "appServiceName=jfactionsdemoprod"
 
+  deploy-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download production release
+        uses: actions/download-artifact@v4
+        with:
+          name: ActionsDemo
+
       - name: Deploy App Service Artifact
-        run: az webapp deployment source config-zip --resource-group ActionsDemo --name jfactionsdemoprod --src artifacts/ActionsDemo.zip
+        run: az webapp deployment source config-zip --resource-group ActionsDemo --name jfactionsdemoprod --src ActionsDemo.zip
